@@ -1,0 +1,31 @@
+<h1>My Remainder App</h1>
+
+Selamat datang di aplikasi remainder khusus pegawai UC.
+Untuk memulai silahkan Login terlebih dahulu.
+
+<br>
+
+<br>
+<center>
+<%=  form_for :formLogin ,:html => { :style => 'width:400px;background-color:grey; color:white;border-radius: 15px;' }, :url => { :action =>:cek_login } do |l| %>
+      <% if flash[:notice] %>
+          <p id="notice"><%= flash[:notice] %></p>
+      <% end %>
+      <% if flash[:error] %>
+          <p id="error"><%= flash[:error] %></p>
+      <% end %>
+      <br/>
+<p ><%=  l.label :'Masukan  Nama'%><br>
+   <%= l.text_field :nama %>
+</p>
+<p>
+   <%= l.label :'Password' %><br>
+   <%= l.password_field :password %><br>
+</p>
+  <p>
+    <!--<%= l.submit :Login,{ :type => :image, :src => "/images/login.png",:style=>{:width=>20}}%>-->
+    <%= l.submit :Login,:class=>"LoginSubmit orange " %>
+    <br>
+  </p><br>
+  <% end %>
+</center>

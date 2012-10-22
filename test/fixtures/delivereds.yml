@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  reminder_id: 1
+  task_id: 1
+  lastdelivered: 2012-10-16 11:42:31
+  status: MyString
+
+two:
+  reminder_id: 1
+  task_id: 1
+  lastdelivered: 2012-10-16 11:42:31
+  status: MyString

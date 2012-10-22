@@ -1,0 +1,96 @@
+<script>
+    $(function() {
+        $('.datepicker2').datetimepicker({timeFormat: "hh:mm:ss",dateFormat:'yy-mm-d'});
+    });
+
+//    function gantiEndDate() {
+//        var question_type_name = $("#reminder_occurance:selected").text()
+//        if(question_type_name == "Tanpa Perulangan"){
+//            $("#reminder_occurance")
+//                    .find('option')
+//                    .remove()
+//                    .end()
+//                    .append($('<option selected="selected"></option>').val("1").html("1"))
+//                    .append($('<option></option>').val("2").html("2"))
+//                    .append($('<option></option>').val("3").html("3"))
+//                    .append($('<option></option>').val("4").html("4"))
+//            ;
+//        }
+//    }
+</script>
+
+<table width="100%">
+  <tr valign="top" >
+  <td>
+  <h2>Reminder:</h2>
+  <% @task.reminder.each_with_index do |r,index| %>
+  <br><b>Reminder ke-<%= index+1 %></b>
+  <p>
+    <b>Perulangan:</b>
+    <%= r.occurance%>
+  </p>
+  <p>
+    <b>Waktu Reminder:</b>
+    <%= r.waktu_reminder.strftime("%A ,%d-%B-%Y %H:%M:%S") %>
+  </p>
+  <p>
+    <b>Tanggal Kadaluarsa:</b>
+    <%= r.waktu_berakhir.strftime("%Y-%m-%d")  %>
+  </p>
+  <p>
+    <b>Isi Email Reminder:</b><br>
+    <%= simple_format(r.isi_email) %>
+  </p>
+  <p>
+  <%= link_to 'Hapus Reminder', [r.task, r],
+               :confirm => 'Yakin menghapus reminder ini?',
+               :method => :delete %>
+  </p>
+ <%end %>
+  
+  <% if @task.reminder.blank? %>
+  Silahkan tambah reminder jika diperlukan
+  <%end %>
+  
+  
+</td>
+<td>
+<h2>Tambah Reminder:</h2>
+<% $isi_email="Remainder dari #{User.where(:id=>session[:user_id].id).first.nama} \n
+       Acara     : #{@task.judul_task} \n
+       Kategori  : #{@task.kategori} \n
+       Tanggal   : #{@task.tgl_task.strftime("%A ,%d %B %Y")} \n
+       Pukul     : #{@task.tgl_task.strftime("%r")} \n
+       Tempat    : #{@task.tempat_task} \n
+  \n  #{@task.ket_task} " %>
+
+<%= form_for([@task, @task.reminder.build]) do |f| %>
+  
+  <div class="field">
+    <%= f.label :occurance,'Perulangan :' %><br />
+    <%= f.select(:occurance,options_for_select([['Tanpa Perulangan'],['Setiap Hari'], ['Setiap Minggu'],['Setiap Bulan'],['Setiap Tahun']]),{},{:onchange => ""}  ) %>
+  </div>
+  <div class="field">
+    <%= f.label :waktu_reminder ,'Reminder akan dikirim email dimulai tanggal:'%><br />
+    <!--<% f.datetime_select :waktu_reminder ,:start_year => Date.current.year, :end_year => 2050,:prompt => { :day => 'Pilih Tanggal', :month => 'Pilih Bulan', :year => 'Pilih Tahun' }%>-->
+   <%= f.text_field :waktu_reminder,:class=>'datepicker2'  %>
+  </div>  
+
+  <div class="field">
+    <%= f.label :waktu_berakhir,'Tanggal Kadaluarsa :' %><br />
+    <%= f.date_select :waktu_berakhir ,{:start_year => Date.current.year,:end_year => 2050,:prompt => {:day => 'Pilih Tanggal',:month => 'Pilih Bulan',:year => 'Pilih Tahun'}} %>
+  </div>
+  <div class="field">
+    <%= f.label :isi_email,"(Silahkan edit isi email sesuai kebutuhan)" %><br />
+    <%= f.text_area :isi_email ,:cols=>70, 
+                    :value=> $isi_email  %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+      <br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/>
+  <% end %>
+  </td><br/> <br/>
+  </tr>
+</table>
+  

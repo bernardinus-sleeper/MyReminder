@@ -1,0 +1,65 @@
+<script>
+    $(function() {
+        $('.datepicker').datetimepicker({timeFormat: "hh:mm:ss",dateFormat:'yy-mm-d'});
+    });
+</script>
+
+<%= form_for(@task) do |f| %>
+  <% if @task.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@task.errors.count, "error") %> prohibited this task from being saved:</h2>
+      <ul>
+      <% @task.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table cellspacing="10">
+  <tr valign="top">
+    <td>
+      <div class="field">
+        <%= f.label :judul_task ,"Judul Kegiatan" %><br />
+        <%= f.text_field :judul_task ,:size=>50%>
+      </div>
+      <div class="field">
+        <%= f.label :tgl_task,"Tanggal Kegiatan" %><br />
+        <!--<%= f.datetime_select :tgl_task %>-->
+        <%= f.text_field :tgl_task,:class => 'datepicker'%>
+      </div>
+
+      <div class="field">
+        <%= f.label :kategori,"Kategori" %><br />
+        <%= f.select :kategori,Category.all.collect {|p| [ p.name] }%>
+      </div>
+      <div class="field">
+        <%= f.label :tempat_task ,"Tempat Kegiatan"%><br />
+
+        <%= f.text_area :tempat_task,:rows=>4 %> <br />
+        NB:Masukan kota pada line pertama untuk melihat google map.<br />
+      </div>
+      
+    </td>
+    <td>
+      <div class="field">
+        <%= f.label :status,"Status" %><br />
+        <%= f.select(:status,options_for_select(@setStatus,:selected=>@statusValue))%>
+      </div>
+      <div class="field" >
+        <%= f.label :ket_task ,"Catatan Kegiatan"%><br />
+        <%= f.text_area :ket_task %>
+      </div>      
+    </td>
+  </tr>
+  <tr>
+    <td>
+  <div class="actions">
+        <%= f.submit %>
+      </div>
+  <% end %>
+   </td>   
+   </tr>
+</table>
+  
+  

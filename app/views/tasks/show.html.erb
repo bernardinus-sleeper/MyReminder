@@ -1,0 +1,67 @@
+
+
+<p id="notice"><%= notice %><br/></p>
+<%= link_to 'Edit Task', edit_task_path(@task) %> |
+<%= link_to 'Main Menu List', tasks_path %>
+
+<table width=100%>
+  <tr >
+    <td ALIGN=LEFT >
+    <h2>Detail Task</h2>
+    <p>
+      <b>Judul task :</b>
+      <%= @task.judul_task %>
+    </p>
+
+    <p>
+      <b>Tanggal task :</b>
+      <%= @task.tgl_task.strftime("%A , %d %B %Y") %>
+    </p>
+
+    <p>
+      <b>Pukul task :</b>
+      <%= @task.tgl_task.strftime("%r") %>
+    </p>
+
+    <p>
+      <b>Tempat task :</b>
+      <%= @task.tempat_task %>
+    </p>
+
+    <p>
+      <b>Ket task :</b>
+      <%= @task.ket_task %>
+    </p>
+
+    <p>
+      <b>Status :</b>
+      <%= @task.status %>
+    </p>
+
+    <p>
+      <b>Kategori :</b>
+      <%= @task.kategori %>
+    </p>
+    </td>
+    <td width="70%">
+
+      <%= gmaps4rails(@json) %>
+
+    </td>
+  </tr>
+</table>
+<%#*untuk menampilkan partial page reminder%>
+<div id="section1">
+<%= render :partial=>"/tasks/reminder/reminder"%>
+</div>
+
+<%#*untuk set scrool page edit reminder%>
+<%if @section%>
+<script type="text/javascript">
+// <!--
+document.location.hash="section<%=@section %>";
+// -->
+</script>
+<%end %>
+|
+<%= link_to 'Kembali ke Task List', tasks_path %>

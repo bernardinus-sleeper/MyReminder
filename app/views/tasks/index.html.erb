@@ -1,0 +1,192 @@
+<script type="text/javascript">
+            function showTime(){
+                    var timeNow = new Date(); 
+                    document.getElementById('spHrs').innerHTML = timeNow.getHours();
+                    document.getElementById('spMins').innerHTML = timeNow.getMinutes();
+                    document.getElementById('spSecs').innerHTML = timeNow.getSeconds();
+            }
+            setInterval(showTime,1000);
+</script>
+
+<center><h1 id="JudulPage">Task List / Daftar Kegiatan Departement <%= h(@user.department).upcase  %></h1></center>
+<% if flash[:notice] %>
+    <p id="notice"><%= flash[:notice] %></p>
+<% end %>
+<% if flash[:error] %>
+    <p id="error"><%= flash[:error] %></p>
+<% end %>
+
+
+<div  align=right>
+  <%= form_tag tasks_path, :method => 'get' do %>
+      <p>
+        <%= text_field_tag :search, params[:search],:size=>40 %>
+        <%= submit_tag "Search", :judul_task => nil %>
+      </p>
+  <% end %>
+
+</div>
+
+  <!--<%link_to(image_tag("/images/search.png"),{:style =>"vertical-align:top" }) %>-->
+
+
+<table>
+  <tr valign="top" >
+      <td width="200px" align="center">
+        
+        Selamat Datang: <br/>
+        <%= h(@user.nama).upcase %><br/>
+        Departement :
+        <%= h(@user.department).upcase %><br/>
+        <br/>
+        Login terakhir : <%= @user.updated_at.strftime(" %d-%B-%Y ") %><br/><br/>
+        Sekarang : <%= Time.now.strftime(" %d-%B-%Y")  %><br/>
+        <div id="clockContainer">
+            <span id="spHrs"></span> : <span id="spMins"></span> : <span id="spSecs"></span>
+        </div>
+
+        <br/>
+
+        <%= button_to 'Kegiatan Baru',{ :action => :new}, {:method => :get,:class=>"LoginSubmit "} %>    <br>
+        <%= button_to 'Logout',{:action => :logout},:class=>"LoginSubmit" %>
+        <br/><br/>       
+        
+        <br/>
+         
+      </td>
+      <td width="100%" border="0" >
+       
+        <table id="my_table" cellpadding="5" cellspacing="0">
+          <thead> 
+        <tr>
+          <th> Aksi</th>
+          <th> Judul</th>
+          <th> Tanggal </th>
+          <th> Tempat</th>
+          <th> Status</th>
+          <th> Reminder</th>
+          <th> PIC </th>
+        </tr>
+        </thead>
+        <tbody>
+        <% odd_or_even = 0
+        for product in @tasks
+          if(h(product.status)=='Selesai')
+            odd_or_even=1
+          else odd_or_even=0
+          end
+        %>
+        <tr valign="top" class="ListLine<%= odd_or_even %>">
+        <td class="ListActions" width="60px">
+        <% if product.id_user == @user.id %>
+        <%= link_to 'Detail', :action => 'show', :id => product %><br/>
+        <%= link_to 'Edit Task', :action => 'edit', :id => product %><br/>
+        <%= link_to 'Hapus',{ :action => 'destroy', :id => product },:method=>'delete',
+          :confirm => "Anda yakin ingin menghapus task ini?" %><br/>
+        <%if (h(product.status)!='Selesai')%>
+        <%= link_to 'Selesai',{:action=>:selesai_task,:id=>product}%>
+        <%else%>
+        <%= link_to 'Belum Selesai',{:action=>:belum_task,:id=>product} %>
+        <%end%>
+        <% end %>
+        </td>
+        <td width="60%">
+        <span class="ListTitle"><%= h(product.judul_task) %></span><br />
+        <%= truncate(product.ket_task ,:length =>100) %>
+        </td>
+        <td><strong><%= product.tgl_task.strftime("%d-%b-%Y") %></strong></td>
+        <td><%= h(product.tempat_task) %></td>
+        <td align="right" width="18%">
+        Kategori :<%= h(product.kategori) %><br/>
+        Status :<strong><%= h(product.status)%></strong>
+        </td>  
+        <td align="Center" width="15%">
+          <% if product.id_user == @user.id %>
+            <% ada_remainder=Reminder.where(:task_id =>product) %>
+            <%if h(product.status)=='Selesai'%>
+            Status selesai tidak lagi direminder
+            <% elsif ada_remainder.blank?%>  
+            <%=link_to image_tag( '/images/reminder.png',:width=>"40"), :action=>'show',:id=>product,:section=>"1"%><br/>
+            <%=link_to 'Set Reminder', :action=>'show',:id=>product,:section=>"1"%><br/>
+            <%else %>  
+              <% for ada in ada_remainder %>
+              Diset:<%= ada.waktu_reminder.strftime("%d-%b-%Y")  %><br/> Pukul:<%= ada.waktu_reminder.strftime("%T %p")%><br/>
+              <%= ada.occurance %><br/>
+                  email akan dikirim ke: <%= product.email_user%>
+                  <br/>
+              <%end%>
+            <%end%>
+          <%end%>
+
+        </td>
+          <td>
+            <% if (product.id_user)%>
+
+             <%= User.where({:id=>product.id_user} ).first.nama.upcase %>
+             <% end %>
+          </td>
+        </tr>
+        <% end %>
+        </tbody>
+        </table>
+         <div><%=  render :partial => '/tasks/shared/tablesorter_pager' %></div>
+      </td>
+  </tr>
+</table>
+
+<!--ini untuk welcome dialog  if session[:welcomedialog] -->
+<% if true %>
+    <% @deliver=Delivered.joins("left join tasks on tasks.id=delivereds.task_id
+    left join reminders on reminders.id= delivereds.reminder_id
+    left join users on tasks.id_user=users.id where tasks.id_user=#{@user.id} and delivereds.lastdelivered > users.updated_at").
+            select("distinct tasks.judul_task,reminders.occurance,delivereds.lastdelivered  ") %>
+    <% if !@deliver.blank? %>
+<script>
+    // Untuk test dialog jquery
+    $.fx.speeds._default = 1000;
+    $(function() {
+        $( "#dialog" ).dialog({
+            autoOpen: true,
+            show: "clip",
+            hide: "fade" ,
+            width:"auto" ,
+            position:({
+                my: 'left',
+                at: 'right bottom'
+            })
+        });
+
+        $( "#dialog" ).dialog( "open" );
+
+        $("#myButton").click( function() {
+            $("#dialog").dialog('close');
+            <% session[:welcomedialog]=false %>
+        });
+
+    });
+</script>
+
+<div id="dialog" class="position1" title="Reminder Terkirim">
+  <table>
+    <tr >
+      <th class=Listjquery>
+        Reminder
+      </th >
+      <th class=Listjquery>Pengulangan</th>
+      <th class=Listjquery>Terakhir dikirim</th>
+    </tr>
+
+     <% for deliver in @deliver %>
+        <tr>
+          <td> <%= deliver.judul_task %></td>
+          <td><%= deliver.occurance %></td>
+          <td><%= deliver.lastdelivered.strftime("%d-%b-%Y %H:%M:%S") %></td>
+        </tr>
+      <%end%>
+  </table>
+  <button type="button" id="myButton" style="text-align: center;">Close</button>
+</div>
+
+<% end %>
+<%end%>
+<!-- akhir untuk welcome dialog-->

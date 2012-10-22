@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  isi_email: MyText
+  waktu_reminder: 2012-09-12 10:28:19
+  occurance: MyString
+  waktu_berakhir: 2012-09-12 10:28:19
+  task: 
+
+two:
+  isi_email: MyText
+  waktu_reminder: 2012-09-12 10:28:19
+  occurance: MyString
+  waktu_berakhir: 2012-09-12 10:28:19
+  task: 

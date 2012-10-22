@@ -1,0 +1,10 @@
+Fri, 31 Aug 2012 13:40:26 -0700
+doc/README_FOR_APP	Fri, 31 Aug 2012 09:07:39 -0700
+app/controllers/application_controller.rb	Fri, 31 Aug 2012 09:07:37 -0700
+app/controllers/home_controller.rb	Fri, 31 Aug 2012 13:26:37 -0700
+app/controllers/posts_controller.rb	Fri, 31 Aug 2012 10:39:46 -0700
+app/controllers/welcome_controller.rb	Fri, 31 Aug 2012 11:04:31 -0700
+app/helpers/application_helper.rb	Fri, 31 Aug 2012 09:07:37 -0700
+app/helpers/posts_helper.rb	Fri, 31 Aug 2012 10:39:46 -0700
+app/helpers/welcome_helper.rb	Fri, 31 Aug 2012 10:52:34 -0700
+app/models/post.rb	Fri, 31 Aug 2012 10:39:45 -0700

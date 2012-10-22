@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  email_user: MyString
+  judul_task: MyString
+  tgl_task: 2012-09-04 13:49:04
+  tempat_task: MyText
+  ket_task: MyText
+  status: MyString
+  kategori: MyString
+
+two:
+  email_user: MyString
+  judul_task: MyString
+  tgl_task: 2012-09-04 13:49:04
+  tempat_task: MyText
+  ket_task: MyText
+  status: MyString
+  kategori: MyString
