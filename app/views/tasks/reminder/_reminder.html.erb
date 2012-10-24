@@ -59,7 +59,7 @@
 <% $isi_email="Remainder dari #{User.where(:id=>session[:user_id].id).first.nama} \n
        Acara     : #{@task.judul_task} \n
        Kategori  : #{@task.kategori} \n
-       Tanggal   : #{@task.tgl_task.strftime("%A ,%d %B %Y")} \n
+       Tanggal   : #{ganti_nama_hari(@task.tgl_task.strftime("%w"))+ @task.tgl_task.strftime(", %d %B %Y")} \n
        Pukul     : #{@task.tgl_task.strftime("%r")} \n
        Tempat    : #{@task.tempat_task} \n
   \n  #{@task.ket_task} " %>

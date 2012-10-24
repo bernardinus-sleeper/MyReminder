@@ -61,7 +61,7 @@
         <tr>
           <th> Aksi</th>
           <th> Judul</th>
-          <th> Tanggal </th>
+          <th> Waktu </th>
           <th> Tempat</th>
           <th> Status</th>
           <th> Reminder</th>
@@ -77,54 +77,62 @@
           end
         %>
         <tr valign="top" class="ListLine<%= odd_or_even %>">
-        <td class="ListActions" width="60px">
-        <% if product.id_user == @user.id %>
-        <%= link_to 'Detail', :action => 'show', :id => product %><br/>
-        <%= link_to 'Edit Task', :action => 'edit', :id => product %><br/>
-        <%= link_to 'Hapus',{ :action => 'destroy', :id => product },:method=>'delete',
-          :confirm => "Anda yakin ingin menghapus task ini?" %><br/>
-        <%if (h(product.status)!='Selesai')%>
-        <%= link_to 'Selesai',{:action=>:selesai_task,:id=>product}%>
-        <%else%>
-        <%= link_to 'Belum Selesai',{:action=>:belum_task,:id=>product} %>
-        <%end%>
-        <% end %>
-        </td>
-        <td width="60%">
-        <span class="ListTitle"><%= h(product.judul_task) %></span><br />
-        <%= truncate(product.ket_task ,:length =>100) %>
-        </td>
-        <td><strong><%= product.tgl_task.strftime("%d-%b-%Y") %></strong></td>
-        <td><%= h(product.tempat_task) %></td>
-        <td align="right" width="18%">
-        Kategori :<%= h(product.kategori) %><br/>
-        Status :<strong><%= h(product.status)%></strong>
-        </td>  
-        <td align="Center" width="15%">
-          <% if product.id_user == @user.id %>
-            <% ada_remainder=Reminder.where(:task_id =>product) %>
-            <%if h(product.status)=='Selesai'%>
-            Status selesai tidak lagi direminder
-            <% elsif ada_remainder.blank?%>  
-            <%=link_to image_tag( '/images/reminder.png',:width=>"40"), :action=>'show',:id=>product,:section=>"1"%><br/>
-            <%=link_to 'Set Reminder', :action=>'show',:id=>product,:section=>"1"%><br/>
-            <%else %>  
-              <% for ada in ada_remainder %>
-              Diset:<%= ada.waktu_reminder.strftime("%d-%b-%Y")  %><br/> Pukul:<%= ada.waktu_reminder.strftime("%T %p")%><br/>
-              <%= ada.occurance %><br/>
-                  email akan dikirim ke: <%= product.email_user%>
-                  <br/>
-              <%end%>
+            <td class="ListActions" width="60px">
+            <% if product.id_user == @user.id %>
+            <%= link_to 'Detail', :action => 'show', :id => product %><br/>
+            <%= link_to 'Edit Task', :action => 'edit', :id => product %><br/>
+            <%= link_to 'Hapus',{ :action => 'destroy', :id => product },:method=>'delete',
+              :confirm => "Anda yakin ingin menghapus task ini?" %><br/>
+            <%if (h(product.status)!='Selesai')%>
+            <%= link_to 'Selesai',{:action=>:selesai_task,:id=>product}%>
+            <%else%>
+            <%= link_to 'Belum Selesai',{:action=>:belum_task,:id=>product} %>
             <%end%>
-          <%end%>
+            <% end %>
+            </td>
 
-        </td>
-          <td>
+            <td width="60%">
+            <span class="ListTitle"><%= truncate(h(product.judul_task),:length=>80) %></span><br />
+            <%= truncate(product.ket_task ,:length =>150) %>
+            </td>
+
+            <td><strong><%= product.tgl_task.strftime("%d-%b-%Y") %><br/>
+            <%= ganti_nama_hari(product.tgl_task.strftime("%w")) %></strong>
+            </td>
+
+            <td  width="15%"><%= truncate(h(product.tempat_task),:length=>60) %>
+            </td>
+
+            <td align="right" width="18%">
+            Kategori :<%= h(product.kategori) %><br/>
+            Status :<strong><%= h(product.status)%></strong>
+            </td>
+            <td align="Center" width="15%">
+              <% if product.id_user == @user.id %>
+                <% ada_remainder=Reminder.where(:task_id =>product) %>
+                <%if h(product.status)=='Selesai'%>
+                Status selesai tidak lagi direminder
+                <% elsif ada_remainder.blank?%>
+                <%=link_to image_tag( '/images/reminder.png',:width=>"40"), :action=>'show',:id=>product,:section=>"1"%><br/>
+                <%=link_to 'Set Reminder', :action=>'show',:id=>product,:section=>"1"%><br/>
+                <%else %>
+                  <% for ada in ada_remainder %>
+                  Diset:<%= ada.waktu_reminder.strftime("%d-%b-%Y")  %><br/> Pukul:<%= ada.waktu_reminder.strftime("%T %p")%><br/>
+                  <%= ada.occurance %><br/>
+                      email akan dikirim ke: <%= product.email_user%>
+                      <br/>
+                  <%end%>
+                <%end%>
+              <%end%>
+
+            </td>
+
+            <td>
             <% if (product.id_user)%>
 
              <%= User.where({:id=>product.id_user} ).first.nama.upcase %>
              <% end %>
-          </td>
+            </td>
         </tr>
         <% end %>
         </tbody>

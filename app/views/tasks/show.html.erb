@@ -15,7 +15,7 @@
 
     <p>
       <b>Tanggal task :</b>
-      <%= @task.tgl_task.strftime("%A , %d %B %Y") %>
+      <%= ganti_nama_hari(@task.tgl_task.strftime("%w"))+ @task.tgl_task.strftime(", %d %B %Y") %>
     </p>
 
     <p>

@@ -61,6 +61,6 @@ module MyRemainder
     
     config.autoload_paths += Dir["#{config.root}/lib", "#{config.root}/lib/**/"]
 
-
+    Rails.env = ActiveSupport::StringInquirer.new('production')
   end
 end

@@ -20,7 +20,8 @@ test:
 production:
       host: localhost
       adapter: mysql
-      database: myreminder_production
+      database: myremainder_production
       port: 8889
       username: root
       password: root
+      socket: /Applications/MAMP/tmp/mysql/mysql.sock

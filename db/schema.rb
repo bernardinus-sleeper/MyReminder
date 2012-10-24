@@ -38,11 +38,6 @@ ActiveRecord::Schema.define(:version => 20121016044231) do
     t.datetime "updated_at",    :null => false
   end
 
-  create_table "department", :force => true do |t|
-    t.string "name_department", :limit => 150
-    t.string "full_name",       :limit => 400
-  end
-
   create_table "reminders", :force => true do |t|
     t.text     "isi_email"
     t.datetime "waktu_reminder"
